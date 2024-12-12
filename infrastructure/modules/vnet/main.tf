@@ -33,3 +33,46 @@ resource "azurerm_subnet" "subnet_db" {
     }
   }
 }
+
+
+resource "azurerm_subnet" "subnet_app_gateway" {
+  name                = "subnet-app-gateway-${var.random_id}"
+  resource_group_name = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.vnet.name
+  address_prefixes    = ["10.0.3.0/24"]
+}
+
+
+resource "azurerm_network_security_group" "nsg-application" {
+  name = "nsg-application-${var.random_id}"
+  resource_group_name = var.resource_group_name
+  location = var.location
+  security_rule {
+    name                       = "Allow_Database"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "10.0.2.0/24"
+    destination_address_prefix = "10.0.1.0/24"
+  }
+}
+
+resource "azurerm_network_security_group" "nsg-database" {
+  name = "nsg-database-${var.random_id}"
+  resource_group_name = var.resource_group_name
+  location = var.location
+  security_rule {
+    name                       = "Allow_App_Service"
+    priority                   = 100
+    direction                  = "Inbound"
+    access                     = "Allow"
+    protocol                   = "*"
+    source_port_range          = "*"
+    destination_port_range     = "*"
+    source_address_prefix      = "10.0.1.0/24"
+    destination_address_prefix = "10.0.2.0/24"
+  }
+}

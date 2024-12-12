@@ -12,3 +12,7 @@ output "subnet_id_db" {
   description = "The ID of the Database subnet."
   value       = azurerm_subnet.subnet_db.id
 }
+
+output "subnet_id_app_gateway" {
+  value = azurerm_subnet.subnet_app_gateway.id
+}

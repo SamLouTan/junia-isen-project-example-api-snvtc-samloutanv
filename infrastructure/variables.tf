@@ -20,3 +20,9 @@ variable "password_db" {
   type        = string
   sensitive = true
 }
+
+variable "docker_registry_password" {
+  description = "Password for the docker registry"
+  type        = string
+  sensitive   = true
+}
