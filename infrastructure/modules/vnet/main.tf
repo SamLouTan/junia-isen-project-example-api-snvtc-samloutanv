@@ -43,36 +43,40 @@ resource "azurerm_subnet" "subnet_app_gateway" {
 }
 
 
+# Règle pour NSG de l'App Service
 resource "azurerm_network_security_group" "nsg-application" {
-  name = "nsg-application-${var.random_id}"
+  name                = "nsg-application-${var.random_id}"
   resource_group_name = var.resource_group_name
-  location = var.location
+  location            = var.location
+
   security_rule {
-    name                       = "Allow_Database"
-    priority                   = 100
+    name                       = "Allow_From_App_Gateway"
+    priority                   = 200
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "*"
+    protocol                   = "Tcp"
     source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "10.0.2.0/24"
+    destination_port_range     = "5000"
+    source_address_prefix      = "10.0.3.0/24"
     destination_address_prefix = "10.0.1.0/24"
   }
 }
 
+# Règle pour NSG de la base de données (si la base est utilisée directement par le Gateway)
 resource "azurerm_network_security_group" "nsg-database" {
-  name = "nsg-database-${var.random_id}"
+  name                = "nsg-database-${var.random_id}"
   resource_group_name = var.resource_group_name
-  location = var.location
+  location            = var.location
+
   security_rule {
-    name                       = "Allow_App_Service"
-    priority                   = 100
+    name                       = "Allow_From_App_Gateway"
+    priority                   = 200
     direction                  = "Inbound"
     access                     = "Allow"
-    protocol                   = "*"
+    protocol                   = "Tcp"
     source_port_range          = "*"
     destination_port_range     = "*"
-    source_address_prefix      = "10.0.1.0/24"
+    source_address_prefix      = "10.0.3.0/24"
     destination_address_prefix = "10.0.2.0/24"
   }
 }

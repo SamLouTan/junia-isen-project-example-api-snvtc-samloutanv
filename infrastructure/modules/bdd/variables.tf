@@ -11,7 +11,6 @@ variable "password_db" {
 variable "location" {
   description = "Region for resources"
   type        = string
-  default     = "France Central"
 }
 
 variable "resource_group_name" {

@@ -26,7 +26,7 @@ resource "azurerm_postgresql_flexible_server" "postgresql-server"{
 }
 
 resource "azurerm_postgresql_flexible_server_database" "postgresql_database" {
-    name                = "examples"
+    name                = "shop"
     server_id           = azurerm_postgresql_flexible_server.postgresql-server.id
     charset             = "UTF8"
 }

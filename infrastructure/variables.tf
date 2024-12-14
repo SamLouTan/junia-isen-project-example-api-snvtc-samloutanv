@@ -21,6 +21,16 @@ variable "password_db" {
   sensitive = true
 }
 
+variable "docker_image_name" {
+  description = "Name of the docker image"
+  type        = string
+}
+
+variable "docker_registry_username" {
+  description = "Username for the docker registry"
+  type        = string
+}
+
 variable "docker_registry_password" {
   description = "Password for the docker registry"
   type        = string
