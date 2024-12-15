@@ -26,16 +26,26 @@ jobs:
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.0  # Version à ajuster 
+          terraform_version: 1.6.0  # Ajustez si nécessaire
 
       - name: Terraform Init
+        working-directory: ./infrastructure
         run: terraform init
 
       - name: Terraform Validate
+        working-directory: ./infrastructure
         run: terraform validate
 
       - name: Terraform Plan
-        run: terraform plan -input=false -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" -var="location=westeurope" -var="username_db=testuser" -var="password_db=testpass" -var="docker_image_name=example/image" -var="docker_registry_username=testregistry" -var="docker_registry_password=testpassword"
+        working-directory: ./infrastructure
+        run: terraform plan -input=false \
+          -var="subscription_id=${{ secrets.ARM_SUBSCRIPTION_ID }}" \
+          -var="location=westeurope" \
+          -var="username_db=testuser" \
+          -var="password_db=testpass" \
+          -var="docker_image_name=example/image" \
+          -var="docker_registry_username=testregistry" \
+          -var="docker_registry_password=testpassword"
 
       - name: Cleanup
         if: always()
